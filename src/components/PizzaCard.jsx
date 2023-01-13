@@ -20,6 +20,7 @@ function PizzaCard({ title, price, image, sizes, types }) {
         <ul>
           {types.map(type => (
             <li
+              key={type}
               onClick={() => handleTypeChange(type)}
               className={activeType === type ? 'active' : ''}
             >
@@ -29,7 +30,11 @@ function PizzaCard({ title, price, image, sizes, types }) {
         </ul>
         <ul>
           {sizes.map((size, i) => (
-            <li onClick={() => handleSizeChange(i)} className={activeSize === i ? 'active' : ''}>
+            <li
+              key={size}
+              onClick={() => handleSizeChange(i)}
+              className={activeSize === i ? 'active' : ''}
+            >
               {size} см.
             </li>
           ))}
