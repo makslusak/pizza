@@ -3,7 +3,7 @@ import { useState } from 'react';
 function PizzaCard({ title, price, image, sizes, types }) {
   const [activeType, setActiveType] = useState(0);
   const [activeSize, setActiveSize] = useState(0);
-  const typeNames = ['тонкое', 'традиционное'];
+  const typeNames = ['тонке', 'традиційне'];
 
   function handleTypeChange(t) {
     setActiveType(t);
@@ -41,7 +41,7 @@ function PizzaCard({ title, price, image, sizes, types }) {
         </ul>
       </div>
       <div className="pizza-block__bottom">
-        <div className="pizza-block__price">от {price} ₴</div>
+        <div className="pizza-block__price">від {price} ₴</div>
         <button className="button button--outline button--add">
           <svg
             width="12"
@@ -55,7 +55,7 @@ function PizzaCard({ title, price, image, sizes, types }) {
               fill="white"
             />
           </svg>
-          <span>Добавить</span>
+          <span>Додати</span>
           <i>2</i>
         </button>
       </div>

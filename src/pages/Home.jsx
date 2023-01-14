@@ -9,7 +9,7 @@ function Home() {
   const [isLoading, setIsloading] = useState(true);
 
   useEffect(() => {
-    fetch('https://run.mocky.io/v3/2760305e-f90d-4ad6-87b3-28bbcf9ead2a')
+    fetch('https://63c2a19ae3abfa59bdb03314.mockapi.io/pizzasapi/pizzas')
       .then(resp => resp.json())
       .then(resp => {
         setItems(resp);
@@ -22,7 +22,7 @@ function Home() {
         <Categories />
         <Sort />
       </div>
-      <h2 className="content__title">Все пиццы</h2>
+      <h2 className="content__title">Обери свій улюблений смак</h2>
       <div className="content__items">
         {isLoading
           ? [...new Array(6)].map((_, i) => <Skeleton />)
