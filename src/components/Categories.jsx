@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
-function Categories() {
-  const [activeIndex, setactiveIndex] = useState(0);
+function Categories({ id, setId }) {
+  // const [activeIndex, setactiveIndex] = useState(0);
   const categoriesArr = ['Всі', "М'ясні", 'Вегетеріанські', 'Гриль', 'Гострі'];
 
   function handleCategoryClick(i) {
-    setactiveIndex(i);
+    setId(i);
   }
 
   return (
@@ -13,7 +13,7 @@ function Categories() {
       <ul>
         {categoriesArr.map((title, i) => (
           <li
-            className={i === activeIndex ? 'active' : ''}
+            className={i === id ? 'active' : ''}
             onClick={() => handleCategoryClick(i)}
             key={title}
           >

@@ -1,13 +1,15 @@
 import { useState } from 'react';
 
-function Sort() {
+function Sort({ sortedValue, setSortedValue }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(0);
-  const sortListArr = ['популярності', 'ціні', 'алфавіту'];
-  const selectedCategory = sortListArr[selected];
+  const sortListArr = [
+    { name: 'популярності', value: 'rating' },
+    { name: 'ціні', value: 'price' },
+    { name: 'алфавіту', value: 'title' },
+  ];
 
   function handleSort(i) {
-    setSelected(i);
+    setSortedValue(i);
     setIsOpen(false);
   }
 
@@ -27,14 +29,18 @@ function Sort() {
           />
         </svg>
         <b>Сортування по:</b>
-        <span onClick={() => setIsOpen(!isOpen)}>{selectedCategory}</span>
+        <span onClick={() => setIsOpen(!isOpen)}>{sortedValue}</span>
       </div>
       {isOpen && (
         <div className="sort__popup">
           <ul>
-            {sortListArr.map((sortName, i) => (
-              <li onClick={() => handleSort(i)} className={i === selected ? 'active' : ''}>
-                {sortName}
+            {sortListArr.map(sortItem => (
+              <li
+                key={sortItem.name}
+                onClick={() => handleSort(sortItem)}
+                className={sortItem.name === sortedValue ? 'active' : ''}
+              >
+                {sortItem.name}
               </li>
             ))}
           </ul>
