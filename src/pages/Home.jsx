@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { AppContext } from '../App';
 import Categories from '../components/Categories';
 import PizzaCard from '../components/PizzaCard';
 import Skeleton from '../components/Skeleton';
 import Sort from '../components/Sort';
 
-function Home({ searchValue }) {
+function Home() {
+  const { searchValue } = useContext(AppContext);
   const [items, setItems] = useState([]);
   const [isLoading, setIsloading] = useState(true);
   const [categoryId, setCategoryId] = useState(0);
