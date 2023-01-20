@@ -15,6 +15,10 @@ const filterSlice = createSlice({
     setSort(state, action) {
       state.sort = action.payload;
     },
+    setFilters(state, action) {
+      state.sort = action.payload.sort;
+      state.categoryId = action.payload.categoryId;
+    },
   },
 });
 

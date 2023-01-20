@@ -3,30 +3,30 @@ import { Link } from 'react-router-dom';
 
 function Cart() {
   return (
-    <div class="container container--cart">
-      <div class="cart">
-        <div class="cart__top">
-          <h2 class="content__title"> Корзина</h2>
-          <div class="cart__clear">
-            <span>Очистить корзину</span>
+    <div className="container container--cart">
+      <div className="cart">
+        <div className="cart__top">
+          <h2 className="content__title"> Кошик</h2>
+          <div className="cart__clear">
+            <span>Очистити кошик</span>
           </div>
         </div>
-        <div class="content__items"></div>
-        <div class="cart__bottom">
-          <div class="cart__bottom-details">
+        <div className="content__items"></div>
+        <div className="cart__bottom">
+          <div className="cart__bottom-details">
             <span>
-              Всего пицц: <b>3 шт.</b>{' '}
+              Загальна кількість : <b>3 шт.</b>
             </span>
             <span>
-              Сумма заказа: <b>900 ₽</b>{' '}
+              Сума замовлення: <b>900 ₴</b>
             </span>
           </div>
-          <div class="cart__bottom-buttons">
-            <Link to="/" class="button button--outline button--add go-back-btn">
-              <span>Вернуться назад</span>
+          <div className="cart__bottom-buttons">
+            <Link to="/" className="button button--outline button--add go-back-btn">
+              <span>Повернутись назад</span>
             </Link>
-            <div class="button pay-btn">
-              <span>Оплатить сейчас</span>
+            <div className="button pay-btn">
+              <span>Оплата</span>
             </div>
           </div>
         </div>

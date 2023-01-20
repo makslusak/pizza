@@ -2,8 +2,11 @@ import React, { useCallback, useContext, useRef, useState } from 'react';
 import debounce from 'lodash.debounce';
 import { AppContext } from '../../App';
 import css from './Search.module.css';
+import { useDispatch } from 'react-redux';
+import { setCategoryId } from '../../redux/slices/filterSlice';
 
 function Search() {
+  const dispatch = useDispatch();
   const inputRef = useRef();
   const { searchValue, setSearchValue } = useContext(AppContext);
   const [value, setValue] = useState('');
@@ -11,6 +14,7 @@ function Search() {
   function handleInput(evt) {
     setValue(evt.target.value);
     handleSearch(value);
+    dispatch(setCategoryId(0));
   }
 
   function handleClearInput() {

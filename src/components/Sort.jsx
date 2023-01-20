@@ -15,7 +15,6 @@ function Sort() {
 
   function handleSort(obj) {
     dispatch(setSort(obj));
-    // setSortedValue(i);
     setIsOpen(false);
   }
 

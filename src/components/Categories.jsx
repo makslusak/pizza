@@ -1,7 +1,4 @@
-import { useState } from 'react';
-
 function Categories({ id, setId }) {
-  // const [activeIndex, setactiveIndex] = useState(0);
   const categoriesArr = ['Всі', "М'ясні", 'Вегетеріанські', 'Гриль', 'Гострі'];
 
   function handleCategoryClick(i) {

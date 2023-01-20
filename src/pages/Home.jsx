@@ -1,21 +1,29 @@
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import QueryString from 'qs';
 import { AppContext } from '../App';
 import { setCategoryId } from '../redux/slices/filterSlice';
 import Categories from '../components/Categories';
 import PizzaCard from '../components/PizzaCard';
 import Skeleton from '../components/Skeleton';
 import Sort from '../components/Sort';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const categoryId = useSelector(state => state.filter.categoryId);
   const sort = useSelector(state => state.filter.sort);
   const { searchValue } = useContext(AppContext);
   const [items, setItems] = useState([]);
   const [isLoading, setIsloading] = useState(true);
-  // const [sortItem, setSortItem] = useState({ name: 'популярності', value: 'rating' });
+
+  useEffect(() => {
+    if (window.location.search) {
+      const params = QueryString.parse(window.location.search.substring(1));
+    }
+  }, []);
 
   useEffect(() => {
     setIsloading(true);
@@ -30,6 +38,18 @@ function Home() {
         setIsloading(false);
       });
   }, [categoryId, sort, searchValue]);
+
+  useEffect(() => {
+    const qeryParams = () => {
+      if (searchValue === '') {
+        return { sort: sort.value, categoryId };
+      }
+      return { searchValue, sort: sort.value, categoryId };
+    };
+    const queryString = QueryString.stringify(qeryParams());
+
+    navigate(`?${queryString}`);
+  }, [categoryId, sort, searchValue, navigate]);
 
   function handleCategoryChange(id) {
     dispatch(setCategoryId(id));
