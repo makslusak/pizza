@@ -1,13 +1,13 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import QueryString from 'qs';
-import { AppContext } from '../App';
-import { setCategoryId } from '../redux/slices/filterSlice';
+
+import { setCategoryId, setFilters } from '../redux/slices/filterSlice';
 import Categories from '../components/Categories';
 import PizzaCard from '../components/PizzaCard';
 import Skeleton from '../components/Skeleton';
-import Sort from '../components/Sort';
+import Sort, { sortListArr } from '../components/Sort';
 import { useNavigate } from 'react-router-dom';
 
 function Home() {
@@ -15,20 +15,48 @@ function Home() {
   const navigate = useNavigate();
   const categoryId = useSelector(state => state.filter.categoryId);
   const sort = useSelector(state => state.filter.sort);
-  const { searchValue } = useContext(AppContext);
+  const searchValue = useSelector(state => state.filter.searchValue);
   const [items, setItems] = useState([]);
   const [isLoading, setIsloading] = useState(true);
+  const isSearch = useRef(false);
+  const isMounted = useRef(false);
 
   useEffect(() => {
     if (window.location.search) {
       const params = QueryString.parse(window.location.search.substring(1));
+      const sort = sortListArr.find(obj => obj.value === params.sort);
+      dispatch(setFilters({ ...params, sort }));
+      isSearch.current = true;
     }
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
+    if (!isSearch.current) {
+      fetchData();
+    }
+    isSearch.current = false;
+  }, [categoryId, sort, searchValue]);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      const qeryParams = () => {
+        if (!searchValue) {
+          return { sort: sort.value, categoryId };
+        }
+        return { searchValue, sort: sort.value, categoryId };
+      };
+      const queryString = QueryString.stringify(qeryParams());
+
+      navigate(`?${queryString}`);
+    }
+    isMounted.current = false;
+  }, [categoryId, sort, searchValue, navigate]);
+
+  function fetchData() {
     setIsloading(true);
     const category = categoryId > 0 ? `&category=${categoryId}` : '';
-    const search = searchValue !== '' ? `&search=${searchValue}` : '';
+    const search = searchValue ? `&search=${searchValue}` : '';
     axios
       .get(
         `https://63c2a19ae3abfa59bdb03314.mockapi.io/pizzasapi/pizzas?sortBy=${sort.value}${category}${search}`
@@ -37,19 +65,7 @@ function Home() {
         setItems(resp.data);
         setIsloading(false);
       });
-  }, [categoryId, sort, searchValue]);
-
-  useEffect(() => {
-    const qeryParams = () => {
-      if (searchValue === '') {
-        return { sort: sort.value, categoryId };
-      }
-      return { searchValue, sort: sort.value, categoryId };
-    };
-    const queryString = QueryString.stringify(qeryParams());
-
-    navigate(`?${queryString}`);
-  }, [categoryId, sort, searchValue, navigate]);
+  }
 
   function handleCategoryChange(id) {
     dispatch(setCategoryId(id));
@@ -64,16 +80,7 @@ function Home() {
       <div className="content__items">
         {isLoading
           ? [...new Array(4)].map((_, i) => <Skeleton key={i} />)
-          : items.map(({ id, title, price, imageUrl, sizes, types }) => (
-              <PizzaCard
-                key={id}
-                title={title}
-                price={price}
-                image={imageUrl}
-                sizes={sizes}
-                types={types}
-              />
-            ))}
+          : items.map(obj => <PizzaCard key={obj.id} {...obj} />)}
       </div>
     </>
   );

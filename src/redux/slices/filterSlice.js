@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   categoryId: 0,
   sort: { name: 'популярності', value: 'rating' },
+  searchValue: '',
 };
 
 const filterSlice = createSlice({
@@ -15,12 +16,16 @@ const filterSlice = createSlice({
     setSort(state, action) {
       state.sort = action.payload;
     },
+    setSearchValue(state, action) {
+      state.searchValue = action.payload;
+    },
     setFilters(state, action) {
       state.sort = action.payload.sort;
-      state.categoryId = action.payload.categoryId;
+      state.categoryId = Number(action.payload.categoryId);
+      state.searchValue = action.payload.searchValue;
     },
   },
 });
 
-export const { setCategoryId, setSort } = filterSlice.actions;
+export const { setCategoryId, setSort, setSearchValue, setFilters } = filterSlice.actions;
 export default filterSlice.reducer;
