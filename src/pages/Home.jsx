@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
+
 import QueryString from 'qs';
 
 import { setCategoryId, setFilters } from '../redux/slices/filterSlice';
@@ -9,6 +9,7 @@ import PizzaCard from '../components/PizzaCard';
 import Skeleton from '../components/Skeleton';
 import Sort, { sortListArr } from '../components/Sort';
 import { useNavigate } from 'react-router-dom';
+import { fetchPizzas } from '../redux/slices/pizzasSlice';
 
 function Home() {
   const dispatch = useDispatch();
@@ -16,8 +17,7 @@ function Home() {
   const categoryId = useSelector(state => state.filter.categoryId);
   const sort = useSelector(state => state.filter.sort);
   const searchValue = useSelector(state => state.filter.searchValue);
-  const [items, setItems] = useState([]);
-  const [isLoading, setIsloading] = useState(true);
+  const { items, status } = useSelector(state => state.pizzas);
   const isSearch = useRef(false);
   const isMounted = useRef(false);
 
@@ -53,18 +53,10 @@ function Home() {
     isMounted.current = false;
   }, [categoryId, sort, searchValue, navigate]);
 
-  function fetchData() {
-    setIsloading(true);
+  async function fetchData() {
     const category = categoryId > 0 ? `&category=${categoryId}` : '';
     const search = searchValue ? `&search=${searchValue}` : '';
-    axios
-      .get(
-        `https://63c2a19ae3abfa59bdb03314.mockapi.io/pizzasapi/pizzas?sortBy=${sort.value}${category}${search}`
-      )
-      .then(resp => {
-        setItems(resp.data);
-        setIsloading(false);
-      });
+    dispatch(fetchPizzas({ category, search, sort }));
   }
 
   function handleCategoryChange(id) {
@@ -78,9 +70,9 @@ function Home() {
       </div>
       <h2 className="content__title">Обери свій улюблений смак</h2>
       <div className="content__items">
-        {isLoading
-          ? [...new Array(4)].map((_, i) => <Skeleton key={i} />)
-          : items.map(obj => <PizzaCard key={obj.id} {...obj} />)}
+        {status === 'LOADING' && [...new Array(4)].map((_, i) => <Skeleton key={i} />)}
+        {status === 'SUCCESS' && items.map(obj => <PizzaCard key={obj.id} {...obj} />)}
+        {status === 'ERROR' && <h2>Помилка з'єднання</h2>}
       </div>
     </>
   );

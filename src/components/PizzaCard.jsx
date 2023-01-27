@@ -35,15 +35,21 @@ function PizzaCard({ id, title, price, imageUrl, sizes, types }) {
       <h4 className="pizza-block__title">{title}</h4>
       <div className="pizza-block__selector">
         <ul>
-          {types.map(type => (
-            <li
-              key={type}
-              onClick={() => handleTypeChange(type)}
-              className={activeType === type ? 'active' : ''}
-            >
-              {typeNames[type]}
-            </li>
-          ))}
+          {types.map(type => {
+            return types.length === 1 ? (
+              <li key={type} className="active">
+                {typeNames[type]}
+              </li>
+            ) : (
+              <li
+                key={type}
+                onClick={() => handleTypeChange(type)}
+                className={activeType === type ? 'active' : '' + types.length === 1 ? 'active' : ''}
+              >
+                {typeNames[type]}
+              </li>
+            );
+          })}
         </ul>
         <ul>
           {sizes.map((size, i) => (
