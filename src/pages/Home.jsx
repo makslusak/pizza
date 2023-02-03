@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import QueryString from 'qs';
@@ -10,14 +10,15 @@ import Skeleton from '../components/Skeleton';
 import Sort, { sortListArr } from '../components/Sort';
 import { useNavigate } from 'react-router-dom';
 import { fetchPizzas } from '../redux/slices/pizzasSlice';
+import { selectCategoryId, selectPizzas, selectSearchValue, selectSort } from '../redux/selectors';
 
 function Home() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const categoryId = useSelector(state => state.filter.categoryId);
-  const sort = useSelector(state => state.filter.sort);
-  const searchValue = useSelector(state => state.filter.searchValue);
-  const { items, status } = useSelector(state => state.pizzas);
+  const categoryId = useSelector(selectCategoryId);
+  const sort = useSelector(selectSort);
+  const searchValue = useSelector(selectSearchValue);
+  const { items, status } = useSelector(selectPizzas);
   const isSearch = useRef(false);
   const isMounted = useRef(false);
 
